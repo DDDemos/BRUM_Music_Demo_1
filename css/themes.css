@@ -1,0 +1,199 @@
+/* Per-band mood shifts. One layout system (base.css), four moods. */
+
+[data-theme="metal"] {
+  --accent-band: #e0293f;
+  --accent-band-2: #c7cad1;
+  --band-tint: #1a0508;
+  --shape-radius: 2px;
+}
+
+[data-theme="pop"] {
+  --accent-band: #ff5fc1;
+  --accent-band-2: #ffd23f;
+  --band-tint: #1a0c1f;
+  --shape-radius: 999px;
+}
+
+[data-theme="reggae"] {
+  --accent-band: #ffb703;
+  --accent-band-2: #2fbf71;
+  --band-tint: #10140a;
+  --shape-radius: 10px;
+}
+
+[data-theme="cosmic"] {
+  --accent-band: #9a6bff;
+  --accent-band-2: #4ea8ff;
+  --band-tint: #090920;
+  --shape-radius: 999px;
+}
+
+/* metal: sharper corners everywhere on the page */
+[data-theme="metal"] .band-photo,
+[data-theme="metal"] .album-card,
+[data-theme="metal"] .badge {
+  border-radius: 2px;
+}
+
+/* pop: rounder, glossier cards */
+[data-theme="pop"] .band-photo,
+[data-theme="pop"] .album-card {
+  border-radius: 18px;
+}
+
+/* cosmic: soft glow behind the hero photo */
+[data-theme="cosmic"] .band-photo {
+  box-shadow: 0 0 60px -10px rgba(154, 107, 255, 0.35);
+}
+
+/* reggae: warm glow */
+[data-theme="reggae"] .band-photo {
+  box-shadow: 0 0 50px -12px rgba(255, 183, 3, 0.3);
+}
+
+/* timeline diagram */
+.timeline-wrap {
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin: 0 -1.25rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.timeline-diagram {
+  position: relative;
+  min-width: 64rem;
+  padding: 1rem 0 0.5rem;
+}
+.timeline-axis {
+  position: relative;
+  height: 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+}
+.timeline-tick {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding-bottom: 0.4rem;
+  border-left: 1px solid var(--border);
+  padding-left: 0.4rem;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.timeline-lane {
+  position: relative;
+  height: 3.1rem;
+  border-bottom: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+}
+.timeline-lane-label {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  padding-right: 0.75rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: nowrap;
+  width: 9rem;
+  flex: none;
+}
+.timeline-track { position: relative; flex: 1; height: 100%; }
+.timeline-node {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  text-decoration: none;
+}
+.timeline-node:hover,
+.timeline-node:focus-visible {
+  width: 0.85rem;
+  height: 0.85rem;
+  z-index: 2;
+}
+.timeline-node-label {
+  position: absolute;
+  top: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease;
+  z-index: 3;
+}
+.timeline-node:hover + .timeline-node-label,
+.timeline-node:focus-visible + .timeline-node-label {
+  opacity: 1;
+  visibility: visible;
+}
+
+.timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1.5rem 0 0.5rem;
+}
+.timeline-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.timeline-legend .dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* no-JS / progressive-enhancement fallback list */
+.timeline-fallback {
+  margin-top: 1rem;
+}
+.timeline-fallback h3 {
+  font-size: 1rem;
+  color: var(--text);
+}
+.timeline-fallback ol {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border-left: 2px solid var(--border);
+}
+.timeline-fallback li {
+  padding: 0.3rem 0 0.3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+.timeline-fallback strong { color: var(--text); }
+.js .timeline-fallback { display: none; }
+
+/* fixed mood colors for timeline nodes (page isn't scoped to one band theme) */
+.timeline-node--metal { background: #e0293f; }
+.timeline-node--pop { background: #ff5fc1; }
+.timeline-node--reggae { background: #ffb703; }
+.timeline-node--cosmic { background: #9a6bff; }
+.timeline-legend .dot--metal { background: #e0293f; }
+.timeline-legend .dot--pop { background: #ff5fc1; }
+.timeline-legend .dot--reggae { background: #ffb703; }
+.timeline-legend .dot--cosmic { background: #9a6bff; }
