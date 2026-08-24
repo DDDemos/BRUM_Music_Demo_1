@@ -28,6 +28,19 @@
   --shape-radius: 999px;
 }
 
+/* Keep each band's character while using light surfaces in day mode. */
+:root[data-color-theme="light"] [data-theme="metal"] { --band-tint: #f8e8e9; }
+:root[data-color-theme="light"] [data-theme="pop"] { --band-tint: #f9eafa; }
+:root[data-color-theme="light"] [data-theme="reggae"] { --band-tint: #f2f5e5; }
+:root[data-color-theme="light"] [data-theme="cosmic"] { --band-tint: #ececfa; }
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-color-theme]) [data-theme="metal"] { --band-tint: #f8e8e9; }
+  :root:not([data-color-theme]) [data-theme="pop"] { --band-tint: #f9eafa; }
+  :root:not([data-color-theme]) [data-theme="reggae"] { --band-tint: #f2f5e5; }
+  :root:not([data-color-theme]) [data-theme="cosmic"] { --band-tint: #ececfa; }
+}
+
 /* metal: sharper corners everywhere on the page */
 [data-theme="metal"] .band-photo,
 [data-theme="metal"] .album-card,
