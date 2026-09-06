@@ -21,20 +21,20 @@ Band pages do not read `BAND_DATA`. Their album cards and Spotify iframes are wr
 
 ## Review notes and current limitations
 
-- **Timeline fallback visibility:** the text list stays visible until successful rendering, then becomes an expandable native disclosure. Missing or malformed data leaves the original list available.
-- **Timeline data assumptions:** field types and finite years are checked, and equal bounds are expanded by five years. Same-year markers within a band can overlap on desktop. Captions cycle through three levels; a larger discography may require further layout work.
-- **Initialization:** timeline mounts are replaced on each valid render. The shared theme initializer still appends a new button and listeners if run repeatedly.
+- **Timeline fallback visibility:** `main.js` adds `.js` immediately, and `.js .timeline-fallback` in `themes.css` uses `display: none`. The list remains in the DOM but is hidden visually and from the accessibility tree when that rule applies. If data or timeline rendering fails after `main.js` runs, the list remains hidden. The comment in `timeline.js` about the list remaining in the DOM does not mean it remains available to assistive technology.
+- **Timeline data assumptions:** rendering assumes valid album arrays, numeric years, and a nonzero rounded year range. Empty or malformed data is not validated. Albums at the same year in one band overlap; there is no collision handling.
+- **One-time initialization:** scripts append elements without checking for existing controls or clearing mounts. Running them again can duplicate buttons, listeners, or diagram content.
 - **Navigation matching:** matching uses only the final pathname segment. Band detail filenames do not match the three top-level navigation links, so those pages have no current-page highlight.
 - **Content duplication:** data edits do not synchronize the static list or album cards. Keep those representations consistent manually.
 
-These are observations from source review, not a certification of accessibility conformance.
+These are observations from source review; this documentation change does not alter runtime behavior or certify accessibility conformance.
 
 ## Manual verification
 
 1. Start the local server using the root README instructions. Open the homepage, timeline, about page, and all band pages; check local images, navigation, and browser-console errors.
 2. Toggle Day/Night, reload, and navigate to another page. Confirm the chosen appearance persists when browser storage is available. The visible button text names the current mode; its accessible label names the action.
 3. Remove the `brumsound-color-theme` local storage entry and reload before testing OS theme changes. With no explicit choice, the page should follow the system. With storage blocked, toggling should still work for the current page.
-4. Check the current dataset produces eight portrait-led timeline lanes, 24 album links, four legend entries, and an axis from 1965 to 1990 at five-year intervals.
-5. Navigate with the keyboard. Check the skip link, theme button, navigation, and timeline dots. Album labels should always be visible; focusing or hovering an album should highlight its label and marker. Check the Spotify destinations and band-page embeds with network access.
-6. Disable JavaScript and reload the timeline. Verify the chronological list is visible and its links work. Separately block the timeline data/script while allowing `main.js` to run and confirm the chronological list remains visible. With successful rendering, check that its disclosure opens and closes.
-7. Check narrow and wide viewports, the vertical mobile release layout, both color modes, and reduced-motion settings. Confirm credits and image alternative text remain appropriate after content edits.
+4. Check the current dataset produces eight timeline lanes, 24 album links, four legend entries, and an axis from 1965 to 1990 at five-year intervals.
+5. Navigate with the keyboard. Check the skip link, theme button, navigation, and timeline dots. Focusing or hovering a dot should reveal its album label. Check the Spotify destinations and band-page embeds with network access.
+6. Disable JavaScript and reload the timeline. Verify the chronological list is visible and its links work. Separately block the timeline data/script while allowing `main.js` to run to observe the documented fallback limitation.
+7. Check narrow and wide viewports, horizontal timeline scrolling, both color modes, and reduced-motion settings. Confirm credits and image alternative text remain appropriate after content edits.

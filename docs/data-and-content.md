@@ -6,7 +6,7 @@
 
 Each band is a plain object with these fields:
 
-- `id` — string slug corresponding by convention to `bands/<id>.html`. The renderer uses it to link the profile and locate its local image.
+- `id` — string slug corresponding by convention to `bands/<id>.html`. The renderer does not currently use it.
 - `name` — string displayed as the lane label and included in album-link accessible names.
 - `theme` — string, one of `metal`, `pop`, `reggae`, or `cosmic`. Determines node color and genre legend membership.
 - `albums` — array of album objects. Each contains `title` (display string), `year` (numeric release year), and `spotifyId` (Spotify album ID string, not a full URL).
@@ -24,7 +24,7 @@ Example using an existing entry:
 }
 ```
 
-The renderer uses array order for bands and sorts a copy of each album array by year. Years determine horizontal position. Supply valid album arrays and finite numeric years, with at least one album overall. The renderer checks field types and known themes, keeps the static list visible on invalid input, and extends equal rounded bounds by five years.
+The renderer uses array order for lanes and album insertion; it does not sort. Years determine horizontal position. Supply valid album arrays and finite numeric years, with at least one album overall and a positive range after rounding to five-year boundaries. There is no runtime schema validation.
 
 The file's opening comment labels it generated data, but no generation script is checked in. Treat edits as manual unless a generator is introduced and documented.
 
@@ -49,7 +49,7 @@ Updating one representation does not update the others. Shared headers and foote
 ## Add a band
 
 1. Copy an existing page in `bands/` with the desired theme to a new slug filename. Replace its page title, description, heading, metadata, lineup, image details, credits, and albums. Keep `../` prefixes for shared assets and top-level navigation.
-2. Add the band image under `images/`, preserving appropriate dimensions and alternative text in page markup. The timeline expects `<id>.jpg` (with an existing `.png` exception for ELO); update its image-path logic if using another extension.
+2. Add the band image under `images/`, preserving appropriate dimensions and alternative text in page markup.
 3. Add a homepage `.band-card` linking to the new profile. If extending the decorative collage, add a placement class and responsive rules in `base.css`.
 4. Add a band object to `BAND_DATA` and corresponding album entries to the static chronological list.
 5. Update `about.html` credits and any copy that states band or album counts, including this project's README.
@@ -59,4 +59,4 @@ Updating one representation does not update the others. Shared headers and foote
 
 Add a `[data-theme="<key>"]` rule in `css/themes.css`, including its band accent, tint, and corner-radius properties. Provide light-mode tint rules for both explicit light mode and system-selected light mode.
 
-Add a `.dot--<key>` legend color rule, then add its display label to `themeNames` inside `js/timeline.js`. Use the same key in the band's data, page body, and homepage card body. Timeline lanes inherit node and release-line colors from their `data-theme` attributes. See the [style reference](styles.md) for scope and inheritance details.
+Add `.timeline-node--<key>` and `.timeline-legend .dot--<key>` color rules, then add its display label to `themeNames` inside `js/timeline.js`. Use the same key in the band's data, page body, and homepage card body. See the [style reference](styles.md) for scope and inheritance details.
