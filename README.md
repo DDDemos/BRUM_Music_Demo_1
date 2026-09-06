@@ -18,7 +18,7 @@ The site uses plain HTML, CSS, and browser JavaScript. Google Fonts and Spotify 
 
 ## Features
 
-- Homepage with a cobalt record-sleeve composition and links to all eight band profiles.
+- Homepage with a pink and cyan eight-band photo collage and links to all eight band profiles.
 - Band pages with formation details, lineups, credited photographs, and selected albums.
 - Album timeline with one row per band and links to Spotify.
 - Day/night theme toggle with a saved preference and operating-system preference support.

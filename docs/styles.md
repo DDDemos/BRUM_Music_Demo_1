@@ -34,7 +34,7 @@ Global `:focus-visible` rules provide keyboard focus outlines. Reduced-motion me
 ## Homepage classes
 
 - `.hero`, `.hero-grid`: introductory region and two-column copy/image layout, stacking below `42rem`.
-- `.hero-art`, `.sleeve-photo`, `.sleeve-inset`, `.sleeve-caption`, `.record-label`: the homepage record-sleeve composition, with monochrome photographs on a cobalt ground. Decorative artwork is hidden from assistive technology.
+- `.hero-collage`, `.collage-tile`, `.ct-1` through `.ct-8`: the original tilted eight-photo grid, with pink and cyan overlays. Below `30rem`, a four-column arrangement hides three decorative tiles. The collage is hidden from assistive technology; all eight band links remain in the directory.
 - `.band-grid`: four-column directory, switching to two columns below `58rem`. `.directory-heading` introduces the directory; `#bands` is the homepage action destination.
 - `.band-card`, `.band-card-media`, `.band-card-body`: linked profile card, fixed-ratio image wrapper, and text area.
 - `.badge`, `.meta`: genre badge and formation summary; the `.meta` rule is scoped to `.band-card`.
