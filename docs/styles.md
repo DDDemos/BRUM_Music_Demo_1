@@ -29,13 +29,13 @@ Genre rules control band tints, accents, corners, and selected photo glows. Ligh
 - `.btn`, `.btn-outline`: anchor button styles; use the latter alongside `.btn` for the outlined variant.
 - `.section`, `.section-tight`: section spacing; `.eyebrow` and `.lede` style introductory copy (`.lede` is styled under `.hero p`).
 
-Global `:focus-visible` rules provide keyboard focus outlines. Reduced-motion media queries disable smooth scrolling and substantially shorten animations/transitions; the collage also suppresses hover scaling.
+Global `:focus-visible` rules provide keyboard focus outlines. Reduced-motion media queries disable smooth scrolling and substantially shorten animations/transitions.
 
 ## Homepage classes
 
-- `.hero`, `.hero-grid`: introductory region and two-column copy/image layout, stacking below `58rem`.
-- `.hero-collage`, `.collage-tile`, `.ct-1` through `.ct-8`: image grid, duotone treatment, and per-image placement. `--tilt` controls rotation and `--tile-tint` the overlay. Below `30rem`, the collage uses four columns and hides selected decorative tiles.
-- `.band-grid`: responsive directory grid with a `15.5rem` minimum card width.
+- `.hero`, `.hero-grid`: introductory region and two-column copy/image layout, stacking below `42rem`.
+- `.hero-art`, `.sleeve-photo`, `.sleeve-inset`, `.sleeve-caption`, `.record-label`: the homepage record-sleeve composition, with monochrome photographs on a cobalt ground. Decorative artwork is hidden from assistive technology.
+- `.band-grid`: four-column directory, switching to two columns below `58rem`. `.directory-heading` introduces the directory; `#bands` is the homepage action destination.
 - `.band-card`, `.band-card-media`, `.band-card-body`: linked profile card, fixed-ratio image wrapper, and text area.
 - `.badge`, `.meta`: genre badge and formation summary; the `.meta` rule is scoped to `.band-card`.
 
