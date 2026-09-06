@@ -16,7 +16,7 @@ Key custom properties are:
 - `--font-display`, `--font-body`: Big Shoulders Display and Archivo, with local fallback fonts.
 - `--container`: shared maximum content width, currently `72rem`.
 
-Genre rules control band tints, accents, corners, and selected photo glows. Light-mode overrides change genre tints. The timeline uses explicit genre color classes because its page contains several genres and has no single body theme.
+Genre rules control band tints, accents, corners, and selected photo glows. Light-mode overrides change genre tints. Each timeline lane uses its own `data-theme`; legend dots use explicit genre color classes.
 
 ## Shared page classes
 
@@ -50,13 +50,17 @@ Global `:focus-visible` rules provide keyboard focus outlines. Reduced-motion me
 
 ## Timeline classes and DOM contracts
 
-The page provides `#timeline-diagram.timeline-diagram` inside `.timeline-wrap` and `#timeline-legend.timeline-legend`. JavaScript locates them by ID; CSS styles them by class.
+The page provides `#timeline-diagram.timeline-diagram` inside an initially hidden `.timeline-wrap` and `#timeline-legend.timeline-legend`. JavaScript locates the mounts by ID and reveals the wrapper after rendering.
 
-- `.timeline-wrap`: horizontally scrollable viewport.
-- `.timeline-diagram`: positioned diagram with a `64rem` minimum width.
-- `.timeline-axis`, `.timeline-tick`: axis and absolutely positioned year marks. The script assigns the axis a `9rem` left margin.
-- `.timeline-lane`, `.timeline-lane-label`, `.timeline-track`: band row, sticky `9rem` label, and remaining plotting area. Keep label width and the script's axis margin synchronized.
-- `.timeline-node`: positioned Spotify anchor, enlarged on hover or keyboard focus. `.timeline-node--metal`, `--pop`, `--reggae`, and `--cosmic` provide colors (each suffix forms a complete class such as `.timeline-node--pop`).
-- `.timeline-node-label`: hidden visual album caption, revealed by `.timeline-node:hover + .timeline-node-label` or the equivalent `:focus-visible` selector. It must immediately follow its corresponding node. JavaScript supplies the accessible name on the anchor and hides the caption from assistive technology.
-- `.timeline-legend`, `.dot`, `.dot--metal`, `.dot--pop`, `.dot--reggae`, `.dot--cosmic`: legend layout and genre markers; dot styles are scoped beneath `.timeline-legend`.
-- `.timeline-fallback`: static chronological list. `.js .timeline-fallback` hides it with `display: none`; see the [review notes](README.md#review-notes-and-current-limitations) for the implications of the root `.js` flag.
+- `.timeline-hero-grid`, `.timeline-photo-strip`, `.timeline-intro-meta`: introduction, decorative band photo triptych, and record/band/scene counts. Photography reuses the existing credited images.
+- `.timeline-heading`: release section title and Spotify instruction.
+- `.timeline-diagram`: defines `--label-width` and `--plot-inset`, shared by the axis and lanes to keep years aligned.
+- `.timeline-axis`, `.timeline-tick`: five-year axis with absolute percentage positions.
+- `.timeline-lane`, `.timeline-lane-label`, `.timeline-band-photo`, `.timeline-band-identity`, `.timeline-band-genre`: genre-themed band section and linked portrait/name. Images become full-color on hover.
+- `.timeline-track`: plot area with grid spacing set by `--tick-step`. `.timeline-release-span` connects the first and last selected release.
+- `.timeline-node`: Spotify anchor containing `.timeline-node-dot` and `.timeline-node-label`. `--position` controls exact marker position; `--level` staggers captions. Caption positions are clamped inside the plot. Both markers and captions accept pointer input; keyboard focus visibly highlights the caption.
+- `.timeline-album-year`, `.timeline-album-title`, `.timeline-album-arrow`: always-visible caption contents. The arrow is decorative.
+- `.timeline-legend`, `.dot`, `.dot--metal`, `.dot--pop`, `.dot--reggae`, `.dot--cosmic`: genre legend and its colored dots.
+- `.timeline-fallback`: chronological text list, converted to a native `details` disclosure after successful enhancement. It is no longer hidden by the root `.js` class.
+
+Below `46rem`, the hero stacks and band lanes become vertical lists with full-width album links, retaining colored markers and portraits. The horizontal axis is hidden, and dates remain visible on every album. Shared surface/text variables support explicit and system-selected day/night modes; existing reduced-motion rules cover transitions.

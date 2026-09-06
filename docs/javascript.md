@@ -6,7 +6,7 @@ The project defines no JavaScript classes or object methods. Its behavior consis
 
 [Source](../js/main.js). Loaded once at the end of every page body. Uses the browser DOM, `location`, optionally `localStorage`, and optionally `window.matchMedia`.
 
-Before either initializer runs, `document.documentElement.classList.add('js')` enables the CSS rule that hides the timeline fallback. This flag indicates script execution, not successful timeline rendering.
+Before either initializer runs, `document.documentElement.classList.add('js')` marks script execution. Timeline fallback visibility no longer depends on this flag.
 
 ### `setupThemeToggle()`
 
@@ -58,27 +58,30 @@ For `/timeline.html`, the timeline link matches; for `/`, the homepage link matc
 
 **Signature:** no arguments; returns `undefined`. Runs immediately; there is no exported render function.
 
-Requires the global lexical binding `BAND_DATA` and `#timeline-diagram`. It returns without rendering if the binding is undefined or the diagram mount is missing. `#timeline-legend` is optional; without it the diagram still renders.
+Requires an array `BAND_DATA` and `#timeline-diagram`. Missing data or mount, malformed band/album fields, unknown themes, or no album years cause an early return, leaving the static list visible. Years must be finite numbers. `#timeline-legend` is optional.
 
-Rendering proceeds as follows:
+1. Validate data and collect album years. Round bounds to five-year intervals; extend the maximum by five if both bounds are equal.
+2. Build the diagram in a document fragment, with five-year ticks on `.timeline-axis`.
+3. Create a labelled section for each band in data order. Apply `data-theme`, and add a linked profile name, genre, and local photograph. Image paths follow `images/<id>.jpg`, except ELO uses `.png`.
+4. Sort a copy of each band's albums by year. Draw `.timeline-release-span` from the first to the last selected release; this is not the band's lifespan.
+5. Create Spotify anchors with accessible names identifying band, title, year, and the new-tab destination. Each contains a marker and a visible caption with year, album title, and decorative arrow. The CSS `--position` property locates markers precisely on the axis; captions are clamped within the plot and staggered via `--level` (album index modulo three).
+6. Replace the diagram and legend contents. The legend lists encountered themes in metal, pop, reggae, cosmic order. Reveal `.timeline-wrap` after rendering.
+7. Convert the static fallback container into a native `details` disclosure with a `summary`, preserving its chronological list. Without successful enhancement, the original list remains expanded. Re-running valid rendering replaces the mounts without duplicating the disclosure.
 
-1. Collect every album year. Round the minimum down and maximum up to multiples of five, then compute `span = maxYear - minYear`.
-2. Append `.timeline-axis` with a `9rem` left margin and `.timeline-tick` spans every five years, including both endpoints.
-3. Iterate bands in data order. For each, append a `.timeline-lane` containing its name in `.timeline-lane-label` and a `.timeline-track`.
-4. Iterate that band's albums in data order. Append an anchor with `.timeline-node` and `.timeline-node--<theme>`, positioned by year. Its destination is `https://open.spotify.com/album/<spotifyId>`, with `target="_blank"` and `rel="noopener"`. Its accessible label includes band, title, year, and Spotify destination.
-5. Immediately after each anchor, append an `aria-hidden` `.timeline-node-label` containing the album title and two-digit year. CSS uses this sibling order to reveal the label on hover or keyboard focus.
-6. Track encountered theme keys and append legend entries for known themes in this fixed order: `metal` (Metal), `pop` (Pop / New Wave), `reggae` (Reggae), `cosmic` (Orchestral / Rock). Unused themes are omitted.
-
-Band names and album titles are inserted with `textContent`; legend captions use text nodes. The initializer appends to existing mounts without clearing them and does not change the static chronological list. Unknown theme keys still produce node classes but have no built-in color or legend entry.
+User-visible strings are inserted through `textContent` or text nodes. IDs in generated URL paths are encoded. The small-screen layout presents sorted album links vertically, without a horizontal year axis.
 
 ### `xPercent(year)`
 
-**Input:** numeric release year. **Return:** numeric percentage along the shared year axis. Private to the timeline initializer; closes over `minYear` and `span`.
+**Input:** numeric release year. **Return:** numeric percentage along the shared axis. Private to the initializer; closes over `minYear` and `span`.
 
 ```js
 return ((year - minYear) / span) * 100;
 ```
 
-With the current data, the axis is 1965–1990: `xPercent(1965)` is `0`, `xPercent(1970)` is `20`, and `xPercent(1990)` is `100`. Callers append `%` when setting `style.left` on ticks, nodes, and labels.
+For the current 1965–1990 axis, 1965 maps to 0, 1970 to 20, and 1990 to 100. Callers append `%` for CSS positions. The initializer validates years and handles equal bounds before calling this helper.
 
-The helper neither clamps values nor handles invalid numbers or a zero span. Empty data yields invalid bounds; a dataset entirely at the same five-year boundary yields a zero span. Data maintenance must preserve a usable range unless rendering is updated to handle these cases.
+### `element(tag, className, text)`
+
+**Inputs:** HTML tag string, CSS class string, and optional text. **Return:** a newly created DOM element.
+
+Assigns `className` and, when supplied, `textContent`. This private helper does not insert the element into the document; callers add attributes, styles, and children before mounting it.
